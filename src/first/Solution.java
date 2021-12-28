@@ -1,12 +1,15 @@
 package first;
 
+import java.util.Arrays;
+
 public class Solution {
 
 	public static void main(String[] args) {
 
 		//String[] mail = { "alsgp0877@naver.com"};
-		String[] mail = { "+test@coding.com", "te.st+james@coding.com", "alsgp0877@naver.com", "test@cod+ing.com" };
+		String[] mail = { "test.email+james@coding.com", "test.e.mail+toto.jane@coding.com", "testemail+tom@cod.ing.com"};
 		String result = null;
+		String[] result1=new String[3];
 		String ff = null;
 		char[] badd = new char[30];
 
@@ -67,11 +70,14 @@ public class Solution {
 
 							if (s3 != null) {
 								result = ff + '@' + s3;
-								System.out.println("유효성 통과 성공" + result);
+								System.out.println("유효성 통과 성공1" + result);
+								result1[k] = result;
 							} else {
 
 								result = ff + '@' + s2;
-								System.out.println("유효성 통과 성공" + result);
+
+								System.out.println("유효성 통과 성공2" + result);
+								result1[k] = result;
 
 							}
 
@@ -80,11 +86,13 @@ public class Solution {
 								if (s3 != null) {
 									ff = f;
 									result = ff + '@' + s3;
-									System.out.println("유효성 통과 성공" + result);
+									result1[k] = result;
+									System.out.println("유효성 통과 성공3" + result);
 								} else {
 									ff = f;
 									result = ff + '@' + s2;
-									System.out.println("유효성 통과 성공" + result);
+									result1[k] = result;
+									System.out.println("유효성 통과 성공4" + result);
 
 								}
 							}
@@ -95,5 +103,15 @@ public class Solution {
 				}
 			}
 		}
+		//https://hianna.tistory.com/554
+		//배열 => stream => 중복제거 => 배열
+		String[] result3 = Arrays.stream(result1).distinct().toArray(String[]::new);
+		for(String str:result3) {
+			System.out.println("유효성 통과 모음" + str);
+			
+		}
+		
+		System.out.println("유효성 통과 모음 갯수" + result3.length);
+
 	}
 }
