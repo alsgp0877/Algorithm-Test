@@ -2,97 +2,97 @@ package first;
 
 import java.util.Arrays;
 
+//1차 리팩토링 : 이름을 좀 알아보기 쉽게 짓는다.
+//2차 리팩토링 : depth 들여쓰기를 줄여본다.
 public class Solution {
 
 	public static void main(String[] args) {
 
-		//String[] mail = { "alsgp0877@naver.com"};
-		String[] mail = { "test.email+james@coding.com", "test.e.mail+toto.jane@coding.com", "testemail+tom@cod.ing.com"};
-		String result = null;
-		String[] result1=new String[3];
-		String ff = null;
-		char[] badd = new char[30];
+		String[] mailCollection = { "test.email+james@coding.com", "test.e.mail+toto.jane@coding.com", "testemail+tom@cod.ing.com"};
+		String mailResult = null; //문자열 조작을 거쳐서 결국 최종적으로 나오는 메일문자열
+		String[] arrmailResult = new String[3];//여러개의 mailResult(최종출력물)들을 배열로 만들고 총 갯수와 최종 출력물을 출력
+		String mailReplace = null;//로컬메일조작본
+		char[] resultsplitDmail = new char[30];//도메인조작본
 
-		for (int k = 0; k < mail.length; k++) {
-			if (mail[k] != null) {
-				if (1 <= mail[k].length() && mail[k].length() <= 100) {
-					if (mail[k].contains("@")) {
+		for (int k = 0; k < mailCollection.length; k++) {
+			if (mailCollection[k] != null) {
+				if (1 <= mailCollection[k].length() && mailCollection[k].length() <= 100) {
+					if (mailCollection[k].contains("@")) {
 
-						String[] mailSplit = mail[k].split("@");
-						String f = mailSplit[0].toLowerCase();
-						String b = mailSplit[1].toLowerCase();
+						String[] mailSplit = mailCollection[k].split("@");
+						String mailLocal = mailSplit[0].toLowerCase();
+						String mailDomain = mailSplit[1].toLowerCase();
 						// 도메인이름에 영어와 . 이외의 문자가 들어오면 없애주기
-						char[] bsplit = b.toCharArray();
-						for (int i = 0; i < bsplit.length; i++) {
-							if (bsplit[i] >= 'a' && bsplit[i] <= 'z') {
-								badd[i] = bsplit[i];
+						char[] arrcharsDomain = mailDomain.toCharArray();
+						for (int i = 0; i < arrcharsDomain.length; i++) {
+							if (arrcharsDomain[i] >= 'a' && arrcharsDomain[i] <= 'z') {
+								resultsplitDmail[i] = arrcharsDomain[i];
 							} else {
-								if (bsplit[i] == '.') {
-									badd[i] = bsplit[i];
+								if (arrcharsDomain[i] == '.') {
+									resultsplitDmail[i] = arrcharsDomain[i];
 								} else {
-									badd[i] = ' ';
+									resultsplitDmail[i] = ' ';
 								}
 							}
 
 						}
-
-						String s2 = new String(badd);
-						String s3 = null;
-						if (s2.contains(" ")) {
-							s3 = s2.replace(s2.substring(s2.indexOf(" "), s2.indexOf(" ") + 1), "");
-							//System.out.println("badd 통과: " + s3);
+						
+						//도메인조작을 한 문자열 중에 빈칸이 생기면 그 빈칸을 없앤 문자열을 만들어주는 구간
+						String blankDmail = new String(resultsplitDmail); //도메인 조작을 안했으면 blankDmail이 그냥 출력되고
+						String chkBlankDmail = null;
+						if (blankDmail.contains(" ")) {//도메인 조작을 했으면 조작한 도메인이 출력될꺼임
+							chkBlankDmail = blankDmail.replace(blankDmail.substring(blankDmail.indexOf(" "), blankDmail.indexOf(" ") + 1), "");
+	
 						}
-
-						boolean firstTextMail = f.startsWith("+");
-						if (f.contains("+")) {
-							if (!firstTextMail) {
+						
+						
+						boolean firstplusLmail = mailLocal.startsWith("+");
+						//로컬메일이 +를 가지는 경우
+						if (mailLocal.contains("+")) {
+							if (!firstplusLmail) {//로컬메일 첫번째 문자가 +가 아닌경우 
 								// f문자열 1~3까지의 문자열
 								// +기호가 시작되는 부분부터 끝까지 문자열
 								// 그 문자열을 f문자열에서 찾아서 빈칸으로 만들기
-								String rsubstring = f.substring(f.indexOf("+", 0), f.length());
+								String rsubstring = mailLocal.substring(mailLocal.indexOf("+", 0), mailLocal.length());
 								//System.out.println("rsubstring 통과: " + rsubstring);
-								ff = f.replace(rsubstring, "");
+								mailReplace = mailLocal.replace(rsubstring, "");
 								//System.out.println("ff 통과: " + ff);
 
 							}
 						}
-						if (ff != null) {
-							if (ff.contains(".")) {
+						//앞에서 로컬메일이 + 조작을 거쳤을경우 
+						if (mailReplace != null) {
+							//로컬메일이 .를 가지는 경우
+							if (mailReplace.contains(".")) {
 
 								// f문자열에서 .있는 위치를 반환해서 그 위치 문자열을 알아낸후 그만큼한 빈칸으로 변경
-								int num = ff.indexOf(".") + 1;
-								String rsubstring = ff.substring(ff.indexOf("."), num);
-								//System.out.println("rsubstring 통과: " + rsubstring);
-								ff = ff.replace(rsubstring, "");
-								//System.out.println("ff 통과: " + ff);
+								int num = mailReplace.indexOf(".") + 1;
+								String rsubstring = mailReplace.substring(mailReplace.indexOf("."), num);
+								mailReplace = mailReplace.replace(rsubstring, "");
+
+							}
+							//도메인조작을 거쳤을 경우 
+							if (chkBlankDmail != null) {
+								mailResult = mailReplace + '@' + chkBlankDmail;
+								arrmailResult[k] = mailResult;
+							} else {//도메인조작을 안거쳤을경우 
+
+								mailResult = mailReplace + '@' + blankDmail;
+								arrmailResult[k] = mailResult;
 
 							}
 
-							if (s3 != null) {
-								result = ff + '@' + s3;
-								System.out.println("유효성 통과 성공1" + result);
-								result1[k] = result;
-							} else {
+						} else {//앞에서 로컬메일이 + 조작을 안거쳤을경우 
+							if (!firstplusLmail) {//+ 조작을 안거쳤기 때문에 +가 첨에 있는지 검사해줘야함
+								if (chkBlankDmail != null) {//도메인조작을 거쳤을 경우 
+									mailReplace = mailLocal;//로컬메일 조작을 안한 그냥 메일로 바꿔주기
+									mailResult = mailReplace + '@' + chkBlankDmail;
+									arrmailResult[k] = mailResult;
 
-								result = ff + '@' + s2;
-
-								System.out.println("유효성 통과 성공2" + result);
-								result1[k] = result;
-
-							}
-
-						} else {
-							if (!firstTextMail) {
-								if (s3 != null) {
-									ff = f;
-									result = ff + '@' + s3;
-									result1[k] = result;
-									System.out.println("유효성 통과 성공3" + result);
-								} else {
-									ff = f;
-									result = ff + '@' + s2;
-									result1[k] = result;
-									System.out.println("유효성 통과 성공4" + result);
+								} else {//도메인조작을 안거쳤을 경우 
+									mailReplace = mailLocal;//로컬메일 조작을 안한 그냥 메일로 바꿔주기
+									mailResult = mailReplace + '@' + blankDmail;
+									arrmailResult[k] = mailResult;
 
 								}
 							}
@@ -105,13 +105,15 @@ public class Solution {
 		}
 		//https://hianna.tistory.com/554
 		//배열 => stream => 중복제거 => 배열
-		String[] result3 = Arrays.stream(result1).distinct().toArray(String[]::new);
-		for(String str:result3) {
+		//최종결과물에서 중복을 제거하고 최종적으로 몇개의 이메일이 나올수있는지 확인, 갯수도 
+		String[] distinctResult = Arrays.stream(arrmailResult).distinct().toArray(String[]::new);
+		for(String str:distinctResult) {
+			
 			System.out.println("유효성 통과 모음" + str);
 			
 		}
 		
-		System.out.println("유효성 통과 모음 갯수" + result3.length);
+		System.out.println("유효성 통과 모음 갯수" + distinctResult.length);
 
 	}
 }
