@@ -22,7 +22,7 @@ public class Solution2 {
 						String mailLocal = mailSplit[0].toLowerCase();
 						String mailDomain = mailSplit[1].toLowerCase();
 						char[] stringtocharDmail = mailDomain.toCharArray();//도메인메일부분을 string -> char로바꿔서 배열에 넣어줌
-						arrmailResult[k] = chkLmail(mailLocal) + '@' + chkDotInDmail(stringtocharDmail);
+						arrmailResult[k] = chkLmail(mailLocal) + '@' + chkDmail(stringtocharDmail);
 						 
 					}
 				}
@@ -40,11 +40,39 @@ public class Solution2 {
 		//최종결과물에서 중복을 제거하고 최종적으로 몇개의 이메일이 나올수있는지 확인, 갯수도 
 
 	}
+	private static String chkLmail(String mailLocal) {
+		
+		boolean firstplusLmail = mailLocal.startsWith("+");
+		String mailLocalReplace = null;//이 변수는 전역으로 있어야 순차적으로 바뀌는 문자열을 표현할수있
+		
+		//로컬메일이 +를 가지는 경우
+		if (mailLocal.contains("+")) {
+			if (!firstplusLmail) {//로컬메일 첫번째 문자가 +가 아닌경우 -> 정상이메일인 경우 
+				mailLocalReplace = mailLocal.replace(mailLocal.substring(mailLocal.indexOf("+"), mailLocal.length()), "");//빈문자열로 만들기 
+				
+				if (mailLocalReplace.contains(".")) {
+
+					mailLocalReplace = mailLocalReplace.replace(mailLocalReplace.substring(mailLocalReplace.indexOf("."), mailLocalReplace.indexOf(".") + 1), "");
+				}
+
+			}
+		}else if (mailLocal.contains(".")) {
+
+			mailLocalReplace = mailLocal.replace(mailLocal.substring(mailLocal.indexOf("."), mailLocal.indexOf(".") + 1), "");
+
+		}else {
+			
+			mailLocalReplace = mailLocal;
+		}
+		
+		return mailLocalReplace;
+		
+	}
 	
 	//2차 리팩토링 : depth 들여쓰기를 줄여본다.
 	//? public 안에 왜 static만 쓸수있나염
 	//이 함수가 기능을 많이하나? 생각해보니 문자열도 체크하고 .도 체크하고 두가지를 하긴함?
-	private static String chkDotInDmail(char[] stringtocharDmail) {
+	private static String chkDmail(char[] stringtocharDmail) {
 		
 		char[] resultDmail = new char[30];//도메인조작본
 		
@@ -80,35 +108,6 @@ public class Solution2 {
 	private static boolean chkDotDmail(char stringtocharDmail) {
 		
 		return stringtocharDmail == '.';
-		
-	}
-	
-	private static String chkLmail(String mailLocal) {
-		
-		boolean firstplusLmail = mailLocal.startsWith("+");
-		String mailLocalReplace = null;//이 변수는 전역으로 있어야 순차적으로 바뀌는 문자열을 표현할수있
-		
-		//로컬메일이 +를 가지는 경우
-		if (mailLocal.contains("+")) {
-			if (!firstplusLmail) {//로컬메일 첫번째 문자가 +가 아닌경우 -> 정상이메일인 경우 
-				mailLocalReplace = mailLocal.replace(mailLocal.substring(mailLocal.indexOf("+"), mailLocal.length()), "");//빈문자열로 만들기 
-				
-				if (mailLocalReplace.contains(".")) {
-
-					mailLocalReplace = mailLocalReplace.replace(mailLocalReplace.substring(mailLocalReplace.indexOf("."), mailLocalReplace.indexOf(".") + 1), "");
-				}
-
-			}
-		}else if (mailLocal.contains(".")) {
-
-			mailLocalReplace = mailLocal.replace(mailLocal.substring(mailLocal.indexOf("."), mailLocal.indexOf(".") + 1), "");
-
-		}else {
-			
-			mailLocalReplace = mailLocal;
-		}
-		
-		return mailLocalReplace;
 		
 	}
 	
