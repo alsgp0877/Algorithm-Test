@@ -3,7 +3,7 @@ package first;
 import java.util.HashSet;
 import java.util.Set;
 
-public class SolutionAnswer {
+public class SolutionEmailAnswer {
 	
 	public static void main(String[] args) {
 		String[] emails = {"test.email+james@coding.com",

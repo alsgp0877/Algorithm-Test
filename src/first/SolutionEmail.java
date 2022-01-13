@@ -2,7 +2,7 @@ package first;
 
 import java.util.Arrays;
 
-class Solution {
+class SolutionEmail {
 
 	public int solve(String[] mailCollection) {
 
