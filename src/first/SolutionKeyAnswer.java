@@ -25,6 +25,7 @@ public class SolutionKeyAnswer {
 		System.out.println("3:" + newStr);
 		
 		int len = sb.length();
+		System.out.println("len:" + len);
 		for(int i=k;i<len;i=i+k) {
 			sb.insert(len-i, '-');
 			System.out.println("4:" + sb);
